@@ -16,9 +16,6 @@ FIGURES_DIR.mkdir(exist_ok=True)
 TABLES_DIR.mkdir(exist_ok=True)
 
 
-# ------------------------------------------------------------
-# Load dense time-series data
-# ------------------------------------------------------------
 df = pd.read_csv(DATA_PATH)
 
 print("\nLoaded dense_timeseries_df")
@@ -34,48 +31,28 @@ time_s = df["time_s"].to_numpy()
 
 n = len(df)
 
-# Storage for estimates
+
 kalman_estimate = np.zeros(n)
 kalman_uncertainty = np.zeros(n)
 
-# Initial estimate:
-# use the first available sensor value
 first_valid_idx = np.where(~np.isnan(observed_rr))[0][0]
 x = observed_rr[first_valid_idx]
 
-# Initial uncertainty:
-# larger number means "not very sure yet"
-P = 10.0
-
-# Process noise:
-# how much we allow true RR to drift each second
+P = 10.0 #look at these
 Q = 0.20
-
-# Measurement noise:
-# how noisy we think the RR sensor is
 R = 4.00
 
 for t in range(n):
-    # -------------------------
-    # Predict step
-    # -------------------------
-    # We assume RR at this second is close to RR from previous second.
+   
     x_pred = x
     P_pred = P + Q
 
-    # -------------------------
-    # Update step
-    # -------------------------
     z = observed_rr[t]
 
     if np.isnan(z):
-        # No sensor measurement.
-        # Keep prediction and let uncertainty grow.
         x = x_pred
         P = P_pred
     else:
-        # Sensor measurement exists.
-        # Kalman gain decides how much to trust sensor vs prediction.
         K = P_pred / (P_pred + R)
 
         x = x_pred + K * (z - x_pred)
@@ -88,10 +65,6 @@ for t in range(n):
 df["kalman_rr_estimate"] = kalman_estimate
 df["kalman_uncertainty"] = kalman_uncertainty
 
-
-# ------------------------------------------------------------
-# Quantify recovery
-# ------------------------------------------------------------
 available = ~np.isnan(observed_rr)
 
 sensor_rmse_available = np.sqrt(
@@ -132,10 +105,6 @@ print("\nKalman respiratory-rate recovery")
 print("--------------------------------")
 print(summary)
 
-
-# ------------------------------------------------------------
-# Plot
-# ------------------------------------------------------------
 plt.figure(figsize=(9, 4.8))
 
 # Shade dropout regions
@@ -152,7 +121,6 @@ for i, is_missing in enumerate(df["rr_dropout"]):
         plt.axvspan(start, end, alpha=0.15)
         in_dropout = False
 
-# Noisy sensor observations
 plt.scatter(
     df["time_s"],
     df["rr_sensor"],
@@ -161,7 +129,6 @@ plt.scatter(
     label="Noisy sensor observation",
 )
 
-# True latent state, known only because this is simulated
 plt.plot(
     df["time_s"],
     df["latent_rr"],
@@ -170,7 +137,6 @@ plt.plot(
     label="True latent RR (simulated)",
 )
 
-# Kalman estimate
 plt.plot(
     df["time_s"],
     df["kalman_rr_estimate"],

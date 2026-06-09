@@ -21,10 +21,6 @@ DATA_PATH = DATA_DIR / "session_features_df.csv"
 FIGURES_DIR.mkdir(exist_ok=True)
 TABLES_DIR.mkdir(exist_ok=True)
 
-
-# ------------------------------------------------------------
-# Load data
-# ------------------------------------------------------------
 df = pd.read_csv(DATA_PATH)
 
 print("\nLoaded session_features_df")
@@ -33,13 +29,6 @@ print(f"Rows: {len(df)}")
 print(f"Unique infants: {df['infant_id'].nunique()}")
 print(f"Groups: {df['group'].value_counts().to_dict()}")
 
-
-# ------------------------------------------------------------
-# Define prediction task
-# ------------------------------------------------------------
-# Do NOT include infant_id. That would be direct cheating.
-# Do NOT include support_active. That directly encodes SUPPORT group after 9 months.
-# Do NOT include post_period for now. It is not wrong mathematically, but it muddies the story.
 feature_cols = [
     "age_months",
     "resting_hr",
@@ -56,12 +45,6 @@ X = df[feature_cols]
 y = df["group"]
 groups = df["infant_id"]
 
-
-# ------------------------------------------------------------
-# Model
-# ------------------------------------------------------------
-# Random forest is intentionally flexible.
-# That makes it able to exploit leakage if leakage is present.
 model = Pipeline(
     steps=[
         ("imputer", SimpleImputer(strategy="median")),
@@ -81,10 +64,6 @@ model = Pipeline(
 scorer = make_scorer(balanced_accuracy_score)
 
 
-# ------------------------------------------------------------
-# Bad validation: row-wise split
-# ------------------------------------------------------------
-# This lets rows from the same infant appear in both train and test.
 row_cv = StratifiedKFold(
     n_splits=5,
     shuffle=True,
@@ -99,11 +78,6 @@ row_scores = cross_val_score(
     scoring=scorer,
 )
 
-
-# ------------------------------------------------------------
-# Better validation: infant-blocked split
-# ------------------------------------------------------------
-# This keeps all rows from the same infant together.
 group_cv = GroupKFold(n_splits=5)
 
 group_scores = cross_val_score(
@@ -116,9 +90,6 @@ group_scores = cross_val_score(
 )
 
 
-# ------------------------------------------------------------
-# Summarize results
-# ------------------------------------------------------------
 summary = pd.DataFrame(
     {
         "validation_scheme": ["row_shuffled_cv"] * len(row_scores)
@@ -152,9 +123,6 @@ inflation = row_scores.mean() - group_scores.mean()
 print(f"\nEstimated inflation from row-wise CV: {inflation:.3f}")
 
 
-# ------------------------------------------------------------
-# Plot
-# ------------------------------------------------------------
 plot_data = [
     row_scores,
     group_scores,
@@ -167,7 +135,7 @@ labels = [
 
 plt.figure(figsize=(5.5, 4.5))
 
-# Boxplot gives summary, scatter shows fold-to-fold spread.
+
 plt.boxplot(
     plot_data,
     labels=labels,
