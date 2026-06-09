@@ -1,0 +1,16 @@
+fold,condition,balanced_accuracy
+1,Deployable features only,0.5680124223602485
+1,Leaked feature available,1.0
+1,Leaky model at deployment,0.5111801242236025
+2,Deployable features only,0.5205045534249675
+2,Leaked feature available,1.0
+2,Leaky model at deployment,0.5253832230329769
+3,Deployable features only,0.5140963855421687
+3,Leaked feature available,1.0
+3,Leaky model at deployment,0.5450602409638554
+4,Deployable features only,0.48737493417588207
+4,Leaked feature available,1.0
+4,Leaky model at deployment,0.482161664033702
+5,Deployable features only,0.5418275418275418
+5,Leaked feature available,1.0
+5,Leaky model at deployment,0.49412805662805664

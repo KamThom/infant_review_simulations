@@ -1,0 +1,5 @@
+metric,value
+held_out_balanced_accuracy,0.9232954545454546
+n_windows,180.0
+n_train,117.0
+n_test,63.0

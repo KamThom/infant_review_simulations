@@ -1,2 +1,0 @@
-- All figures start with 3months and have 0 before. Should probably change that
-- change the colors of figures to mathc

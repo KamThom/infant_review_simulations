@@ -1,0 +1,4 @@
+condition,mean_balanced_accuracy,sd_balanced_accuracy
+Deployable features only,0.5263631674661617,0.030326090005032284
+Leaked feature available,1.0,0.0
+Leaky model at deployment,0.5115826617764386,0.024907951465298745

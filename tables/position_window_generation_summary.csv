@@ -1,0 +1,5 @@
+true_position,n_windows,mean_movement_intensity,mean_posture_angle,mean_movement_variability
+held,46,0.689,64.033,0.338
+prone,22,0.297,-5.801,0.133
+sitting,50,0.455,82.388,0.211
+supine,62,0.17,4.616,0.094
