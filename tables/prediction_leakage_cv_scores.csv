@@ -1,0 +1,11 @@
+validation_scheme,fold,balanced_accuracy
+row_shuffled_cv,1,0.7069407603890362
+row_shuffled_cv,2,0.7362953138815208
+row_shuffled_cv,3,0.7400765266221851
+row_shuffled_cv,4,0.7209402932121725
+row_shuffled_cv,5,0.7157844154845655
+infant_blocked_cv,1,0.7401883830455259
+infant_blocked_cv,2,0.6752752264519465
+infant_blocked_cv,3,0.7013385999561116
+infant_blocked_cv,4,0.6011981054918764
+infant_blocked_cv,5,0.6662218240021537
