@@ -154,7 +154,6 @@ ax.set_title("Mixed-effects model separates developmental trajectories from infa
 
 ax.set_xlim(2.5, 24.5)
 
-# adjust these 
 ax.set_ylim(100, 155)
 
 ax.legend(frameon=False, loc="upper right")

@@ -1,8 +1,6 @@
 metric,value
 sensor_rmse_available_samples,1.9803750112504412
-kalman_rmse_available_samples,0.5038510669280521
-kalman_rmse_all_samples,0.5082993610913599
+kalman_rmse_available_samples,0.6809025078188167
+kalman_rmse_all_samples,0.6741456781127881
 missing_rr_samples,30.0
 total_samples,300.0
-Q_process_noise,0.05
-R_measurement_noise,5.0

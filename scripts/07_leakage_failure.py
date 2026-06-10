@@ -134,7 +134,7 @@ for fold_idx, (train_idx, test_idx) in enumerate(cv.split(df, y, groups=groups),
 
 scores_df = pd.DataFrame(records)
 
-scores_path = TABLES_DIR / "leakage_failure_fold_scores.csv"
+scores_path = TABLES_DIR / "figure_07_leakage_failure_fold_scores.csv"
 scores_df.to_csv(scores_path, index=False)
 
 summary_df = (
@@ -146,7 +146,7 @@ summary_df = (
     .reset_index()
 )
 
-summary_path = TABLES_DIR / "leakage_failure_summary.csv"
+summary_path = TABLES_DIR / "figure_07_leakage_failure_summary.csv"
 summary_df.to_csv(summary_path, index=False)
 
 print("\nLeakage failure summary")
@@ -246,8 +246,8 @@ ax.set_ylim(0.40, 1.04)
 
 fig.tight_layout()
 
-png_path = FIGURES_DIR / "figure_04_leakage_failure.png"
-pdf_path = FIGURES_DIR / "figure_04_leakage_failure.pdf"
+png_path = FIGURES_DIR / "figure_07_leakage_failure.png"
+pdf_path = FIGURES_DIR / "figure_07_leakage_failure.pdf"
 
 fig.savefig(png_path)
 fig.savefig(pdf_path)

@@ -36,14 +36,15 @@ time_s = df["time_s"].to_numpy()
 n = len(df)
 
 kalman_estimate = np.zeros(n)
+kalman_uncertainty = np.zeros(n)
 
 
-valid_initial_values = observed_rr[~np.isnan(observed_rr)][:20]
-x = np.mean(valid_initial_values)
+first_valid_idx = np.where(~np.isnan(observed_rr))[0][0]
+x = observed_rr[first_valid_idx]
 
-P = 5.0
-Q = 0.05
-R = 5.00
+P = 10.0
+Q = 0.20
+R = 4.00
 
 for t in range(n):
 
@@ -60,9 +61,11 @@ for t in range(n):
         P = (1 - K) * P_pred
 
     kalman_estimate[t] = x
+    kalman_uncertainty[t] = P
 
 
 df["kalman_rr_estimate"] = kalman_estimate
+df["kalman_uncertainty"] = kalman_uncertainty
 
 available = ~np.isnan(observed_rr)
 
@@ -86,8 +89,6 @@ summary = pd.DataFrame(
             "kalman_rmse_all_samples",
             "missing_rr_samples",
             "total_samples",
-            "Q_process_noise",
-            "R_measurement_noise",
         ],
         "value": [
             sensor_rmse_available,
@@ -95,8 +96,6 @@ summary = pd.DataFrame(
             kalman_rmse_all,
             int(df["rr_sensor"].isna().sum()),
             len(df),
-            Q,
-            R,
         ],
     }
 )
@@ -109,26 +108,7 @@ print("--------------------------------")
 print(summary)
 
 
-fig, ax = plt.subplots(figsize=(8.2, 4.4))
-
-in_dropout = False
-start = None
-
-for i, is_missing in enumerate(df["rr_dropout"]):
-    if is_missing and not in_dropout:
-        start = df.loc[i, "time_s"]
-        in_dropout = True
-
-    if in_dropout and (not is_missing or i == len(df) - 1):
-        end = df.loc[i, "time_s"]
-        ax.axvspan(
-            start,
-            end,
-            color=COLORS["gray_light"],
-            alpha=0.6,
-            linewidth=0,
-        )
-        in_dropout = False
+fig, ax = plt.subplots(figsize=(9.0, 4.8))
 
 ax.scatter(
     df["time_s"],
@@ -143,15 +123,6 @@ ax.scatter(
 
 ax.plot(
     df["time_s"],
-    df["latent_rr"],
-    linestyle="--",
-    linewidth=2.0,
-    color=COLORS["black"],
-    label="Known latent RR, simulated",
-)
-
-ax.plot(
-    df["time_s"],
     df["kalman_rr_estimate"],
     linewidth=2.8,
     color=COLORS["REF"],
@@ -160,12 +131,12 @@ ax.plot(
 
 ax.set_xlabel("Time (s)")
 ax.set_ylabel("Respiratory rate (breaths/min)")
-ax.set_title("State-space tracking through sensor noise and dropout")
+ax.set_title("State-space estimate tracks respiratory rate through dropout")
 
 ax.set_xlim(df["time_s"].min(), df["time_s"].max())
 
-y_min = min(df["latent_rr"].min(), np.nanmin(df["rr_sensor"]), df["kalman_rr_estimate"].min()) - 2
-y_max = max(df["latent_rr"].max(), np.nanmax(df["rr_sensor"]), df["kalman_rr_estimate"].max()) + 2
+y_min = min(np.nanmin(df["rr_sensor"]), df["kalman_rr_estimate"].min()) - 2
+y_max = max(np.nanmax(df["rr_sensor"]), df["kalman_rr_estimate"].max()) + 2
 ax.set_ylim(y_min, y_max)
 
 ax.legend(frameon=False, loc="upper right")

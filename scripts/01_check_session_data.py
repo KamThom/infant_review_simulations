@@ -39,7 +39,7 @@ age_summary = (
         resting_hr_mean=("resting_hr", "mean"),
         hrv_sdnn_mean=("hrv_sdnn", "mean"),
         mean_rr_mean=("mean_rr", "mean"),
-        pupil_response_mean=("pupil_social_response", "mean"),
+        pupil_response_mean=("pupil_response", "mean"),
         ecg_hr_mean=("ecg_hr", "mean"),
         ppg_hr_mean=("ppg_hr", "mean"),
     )

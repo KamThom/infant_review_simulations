@@ -20,7 +20,6 @@ PARAMS = {
     "sessions_per_age": 3,
     "session_keep_prob": 0.90,
 
-    # Heart-rate trajectory.
     "ref_hr_at_3mo": 137.0,
     "comparison_hr_at_3mo": 140.5,
     "ref_hr_slope_per_month_after_3mo": -1.10,
@@ -28,31 +27,26 @@ PARAMS = {
     "hr_between_infant_sd": 5.5,
     "hr_session_noise_sd": 3.0,
 
-    # HRV is kept roughly stable over this window.
     "hrv_mean_sdnn_ms": 24.0,
     "hrv_age_slope_per_month_after_3mo": 0.01,
     "hrv_between_infant_sd": 2.5,
     "hrv_session_noise_sd": 1.6,
 
-    # Respiratory rate trajectory.
     "rr_at_3mo": 43.0,
     "rr_slope_per_month_after_3mo": -0.78,
     "rr_between_infant_sd": 2.2,
     "rr_session_noise_sd": 1.4,
 
-    # Residual-analysis / confounder demonstration.
     "social_exposure_beta": 0.22,
     "luminance_beta": -0.10,
     "context_bump_beta": 0.18,
     "pupil_between_infant_sd": 0.04,
     "pupil_session_noise_sd": 0.04,
 
-    # Sensor-agreement demonstration.
     "ppg_bias_bpm": -1.6,
     "ecg_noise_sd": 1.0,
     "ppg_noise_sd": 2.4,
 
-    # Dense time-series / state-space demo.
     "dense_duration_s": 300,
     "dense_rr_baseline": 38.0,
     "dense_arousal_to_rr": 2.5,
@@ -164,7 +158,7 @@ def generate_session_features_df(params: dict) -> pd.DataFrame:
 
                 missing_fraction = np.clip(rng.beta(1.5, 18.0), 0, 0.40)
 
-                #leakage feature for Figure 4.
+                # Leakage feature for optional Figure 07.
                 group_code = 1 if group == "COMPARISON" else 0
                 recording_context_code = group_code + rng.normal(0, 0.12)
 

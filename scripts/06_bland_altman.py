@@ -70,8 +70,8 @@ plt.legend(frameon=False, fontsize=8)
 
 plt.tight_layout()
 
-png_path = FIGURES_DIR / "figure_bland_altman_sensor_agreement.png"
-pdf_path = FIGURES_DIR / "figure_bland_altman_sensor_agreement.pdf"
+png_path = FIGURES_DIR / "figure_06_bland_altman_sensor_agreement.png"
+pdf_path = FIGURES_DIR / "figure_06_bland_altman_sensor_agreement.pdf"
 
 plt.savefig(png_path, dpi=300)
 plt.savefig(pdf_path)
