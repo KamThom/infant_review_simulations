@@ -1,5 +1,5 @@
-age_months,reference_median_hr,reference_lower_hr,reference_upper_hr,source_note
-3,138,105,175,"Approximate visual anchor from Fleming et al. 2011, Lancet, PMID 21411136"
-6,132,98,165,"Approximate visual anchor from Fleming et al. 2011, Lancet, PMID 21411136"
-12,122,90,150,"Approximate visual anchor from Fleming et al. 2011, Lancet, PMID 21411136"
-24,113,80,135,"Approximate visual anchor from Fleming et al. 2011, Lancet, PMID 21411136"
+age_months,reference_median_hr,reference_lower_hr,reference_upper_hr
+3,138,105,175
+6,132,98,165
+12,122,90,150
+24,113,80,135
