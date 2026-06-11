@@ -202,7 +202,6 @@ ax_timeline.set_yticks([])
 ax_timeline.set_ylim(0, 1)
 ax_timeline.set_xlim(df["time_start_s"].min() / 60, df["time_end_s"].max() / 60)
 
-# Legend for timeline
 legend_handles = []
 for label in label_order:
     handle = plt.Line2D(

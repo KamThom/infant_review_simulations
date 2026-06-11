@@ -119,7 +119,6 @@ for spec in plot_specs:
         edgecolors="none",
     )
 
-    # Smooth trend line through residuals.
     smoothed = lowess(
         endog=df[resid_col],
         exog=df["context_activity_z"],

@@ -78,10 +78,17 @@ pred_df["group"] = pd.Categorical(
 pred_df["predicted_resting_hr"] = result.predict(pred_df)
 
 
-group_age_summary = (
-    df.groupby(["group", "age_months"], observed=True)
+infant_age_df = (
+    df.groupby(["infant_id", "group", "age_months"], observed=True, as_index=False)
     .agg(
-        n_rows=("resting_hr", "size"),
+        resting_hr=("resting_hr", "mean"),
+    )
+)
+
+group_age_summary = (
+    infant_age_df.groupby(["group", "age_months"], observed=True)
+    .agg(
+        n_infant_age_rows=("resting_hr", "size"),
         n_infants=("infant_id", "nunique"),
         mean_resting_hr=("resting_hr", "mean"),
         sem_resting_hr=("resting_hr", "sem"),
@@ -93,25 +100,44 @@ group_age_summary_path = TABLES_DIR / "group_age_resting_hr_summary.csv"
 group_age_summary.to_csv(group_age_summary_path, index=False)
 
 
-fig, ax = plt.subplots(figsize=(7.0, 4.8))
+example_infants = []
 
 for group in groups:
-    group_df = df[df["group"] == group]
+    group_infants = (
+        infant_age_df.loc[infant_age_df["group"] == group, "infant_id"]
+        .drop_duplicates()
+        .sort_values()
+        .head(14)
+    )
+
+    for infant_id in group_infants:
+        example_infants.append({"group": group, "infant_id": infant_id})
+
+example_infants_path = TABLES_DIR / "figure_03_example_infant_trajectories.csv"
+pd.DataFrame(example_infants).to_csv(example_infants_path, index=False)
+
+
+fig, ax = plt.subplots(figsize=(6.4, 4.4))
+
+for group in groups:
+    group_df = infant_age_df[
+        (infant_age_df["group"] == group)
+        & (
+            infant_age_df["infant_id"].isin(
+                [row["infant_id"] for row in example_infants if row["group"] == group]
+            )
+        )
+    ]
     color = COLORS[group]
 
     for infant_id, infant_df in group_df.groupby("infant_id"):
-        infant_age_mean = (
-            infant_df.groupby("age_months", observed=True)["resting_hr"]
-            .mean()
-            .reset_index()
-        )
-
         ax.plot(
-            infant_age_mean["age_months"],
-            infant_age_mean["resting_hr"],
+            infant_df["age_months"],
+            infant_df["resting_hr"],
             color=color,
-            linewidth=0.7,
-            alpha=0.18,
+            linewidth=0.8,
+            alpha=0.12,
+            zorder=1,
         )
 
 
@@ -126,8 +152,9 @@ for group in groups:
         color=color,
         marker="o",
         markersize=5,
-        linewidth=2.8,
+        linewidth=3.0,
         label=label,
+        zorder=4,
     )
 
 for group in groups:
@@ -145,14 +172,16 @@ for group in groups:
         ecolor=color,
         elinewidth=1,
         capsize=2,
-        alpha=0.9,
+        alpha=0.95,
+        zorder=5,
     )
 
 ax.set_xlabel("Age (months)")
 ax.set_ylabel("Resting heart rate (bpm)")
-ax.set_title("Mixed-effects model separates developmental trajectories from infant-level variation")
+ax.set_title("A", loc="left", fontweight="bold")
 
 ax.set_xlim(2.5, 24.5)
+ax.set_xticks(age_grid)
 
 ax.set_ylim(100, 155)
 
@@ -170,3 +199,4 @@ print(f"\nSaved PNG to: {png_path}")
 print(f"Saved PDF to: {pdf_path}")
 print(f"Saved model coefficients to: {coef_path}")
 print(f"Saved group-age summary to: {group_age_summary_path}")
+print(f"Saved example infant IDs to: {example_infants_path}")

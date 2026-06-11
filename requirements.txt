@@ -1,7 +1,5 @@
 matplotlib
 numpy
 pandas
-patsy
-scipy
 scikit-learn
 statsmodels

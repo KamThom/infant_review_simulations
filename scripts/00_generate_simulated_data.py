@@ -127,7 +127,6 @@ def generate_session_features_df(params: dict) -> pd.DataFrame:
                     -0.5 * ((context_activity_z - 1.1) / 0.35) ** 2
                 )
 
-                # Predictor of interest, mildly correlated with context.
                 social_exposure = np.clip(
                     0.45
                     + 0.20 * context_bump
@@ -137,8 +136,6 @@ def generate_session_features_df(params: dict) -> pd.DataFrame:
                     1,
                 )
 
-                # Outcome for residual analysis.
-        
                 pupil_response = (
                     0.20
                     + params["social_exposure_beta"] * social_exposure
@@ -148,7 +145,6 @@ def generate_session_features_df(params: dict) -> pd.DataFrame:
                     + rng.normal(0, params["pupil_session_noise_sd"])
                 )
 
-                # Sensor agreement columns.
                 ecg_hr = resting_hr + rng.normal(0, params["ecg_noise_sd"])
                 ppg_hr = (
                     resting_hr
@@ -158,7 +154,6 @@ def generate_session_features_df(params: dict) -> pd.DataFrame:
 
                 missing_fraction = np.clip(rng.beta(1.5, 18.0), 0, 0.40)
 
-                # Leakage feature for optional Figure 07.
                 group_code = 1 if group == "COMPARISON" else 0
                 recording_context_code = group_code + rng.normal(0, 0.12)
 
