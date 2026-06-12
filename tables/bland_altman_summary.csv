@@ -1,5 +1,0 @@
-metric,value
-mean_bias_ppg_minus_ecg_bpm,-1.596519959058342
-sd_difference_bpm,2.6172334779683797
-upper_limit_of_agreement_bpm,3.533257657759682
-lower_limit_of_agreement_bpm,-6.726297575876366

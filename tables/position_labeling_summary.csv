@@ -1,5 +1,6 @@
 metric,value
-held_out_balanced_accuracy,0.9232954545454546
-n_windows,180.0
-n_train,117.0
-n_test,63.0
+model,RandomForestClassifier
+held_out_balanced_accuracy,0.9449831813357796
+n_windows,1080
+n_train,702
+n_test,378

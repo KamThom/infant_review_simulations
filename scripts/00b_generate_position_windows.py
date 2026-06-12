@@ -16,7 +16,7 @@ PARAMS = {
     "seed": 104,
     "infant_id": "I001",
     "session_id": "position_session_001",
-    "duration_min": 30,
+    "duration_min": 180,
     "window_size_s": 10,
 }
 
@@ -77,10 +77,10 @@ def sample_next_state(rng, current_state):
     states = ["held", "supine", "prone", "sitting"]
 
     transition_probs = {
-        "held":    [0.78, 0.10, 0.04, 0.08],
-        "supine":  [0.10, 0.72, 0.12, 0.06],
-        "prone":   [0.08, 0.16, 0.68, 0.08],
-        "sitting": [0.14, 0.06, 0.06, 0.74],
+        "held":    [0.965, 0.015, 0.005, 0.015],
+        "supine":  [0.012, 0.972, 0.012, 0.004],
+        "prone":   [0.010, 0.025, 0.950, 0.015],
+        "sitting": [0.018, 0.006, 0.006, 0.970],
     }
 
     return rng.choice(states, p=transition_probs[current_state])

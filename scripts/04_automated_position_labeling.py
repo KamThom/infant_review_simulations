@@ -1,6 +1,10 @@
 from pathlib import Path
 import numpy as np
 import pandas as pd
+import matplotlib
+
+matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
 
 from sklearn.ensemble import RandomForestClassifier
@@ -107,8 +111,20 @@ cm_norm_df.to_csv(cm_norm_path)
 summary_path = TABLES_DIR / "position_labeling_summary.csv"
 pd.DataFrame(
     {
-        "metric": ["held_out_balanced_accuracy", "n_windows", "n_train", "n_test"],
-        "value": [balanced_acc, len(df), len(train_idx), len(test_idx)],
+        "metric": [
+            "model",
+            "held_out_balanced_accuracy",
+            "n_windows",
+            "n_train",
+            "n_test",
+        ],
+        "value": [
+            "RandomForestClassifier",
+            balanced_acc,
+            len(df),
+            len(train_idx),
+            len(test_idx),
+        ],
     }
 ).to_csv(summary_path, index=False)
 
@@ -156,7 +172,7 @@ im = ax_cm.imshow(
     cmap="Greys",
 )
 
-ax_cm.set_title(f"B. Held-out labeling accuracy = {balanced_acc:.2f}")
+ax_cm.set_title(f"B. Random forest held-out accuracy = {balanced_acc:.2f}")
 ax_cm.set_xticks(np.arange(len(label_order)))
 ax_cm.set_yticks(np.arange(len(label_order)))
 ax_cm.set_xticklabels([POSITION_LABELS[x] for x in label_order], rotation=35, ha="right")
@@ -190,17 +206,17 @@ for _, row in df.iterrows():
     label = row["predicted_position"]
 
     ax_timeline.broken_barh(
-        [(row["time_start_s"] / 60, (row["time_end_s"] - row["time_start_s"]) / 60)],
+        [(row["time_start_s"] / 3600, (row["time_end_s"] - row["time_start_s"]) / 3600)],
         (timeline_y, 1),
         facecolors=POSITION_COLORS[label],
         edgecolors="none",
     )
 
 ax_timeline.set_title("C. Classifier converts dense windows into a behavioral timeline")
-ax_timeline.set_xlabel("Session time (min)")
+ax_timeline.set_xlabel("Session time (hours)")
 ax_timeline.set_yticks([])
 ax_timeline.set_ylim(0, 1)
-ax_timeline.set_xlim(df["time_start_s"].min() / 60, df["time_end_s"].max() / 60)
+ax_timeline.set_xlim(df["time_start_s"].min() / 3600, df["time_end_s"].max() / 3600)
 
 legend_handles = []
 for label in label_order:
@@ -223,7 +239,7 @@ ax_timeline.legend(
 
 
 fig.suptitle(
-    "Automated labeling turns wearable sensor windows into behavioral representations",
+    "Random forest labeling turns wearable sensor windows into behavioral representations",
     y=0.98,
 )
 

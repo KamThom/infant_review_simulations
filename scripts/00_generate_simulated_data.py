@@ -21,10 +21,12 @@ PARAMS = {
     "session_keep_prob": 0.90,
 
     "ref_hr_at_3mo": 137.0,
-    "comparison_hr_at_3mo": 140.5,
+    "comparison_hr_at_3mo": 143.0,
     "ref_hr_slope_per_month_after_3mo": -1.10,
-    "comparison_hr_slope_per_month_after_3mo": -1.00,
+    "comparison_hr_slope_per_month_after_3mo": -0.82,
     "hr_between_infant_sd": 5.5,
+    "ref_hr_infant_slope_sd_per_month_after_3mo": 0.08,
+    "comparison_hr_infant_slope_sd_per_month_after_3mo": 0.20,
     "hr_session_noise_sd": 3.0,
 
     "hrv_mean_sdnn_ms": 24.0,
@@ -74,6 +76,15 @@ def generate_session_features_df(params: dict) -> pd.DataFrame:
         group = groups[infant_index]
 
         infant_hr_offset = rng.normal(0, params["hr_between_infant_sd"])
+        hr_slope_sd_key = (
+            "comparison_hr_infant_slope_sd_per_month_after_3mo"
+            if group == "COMPARISON"
+            else "ref_hr_infant_slope_sd_per_month_after_3mo"
+        )
+        infant_hr_slope_offset = rng.normal(
+            0,
+            params[hr_slope_sd_key],
+        )
         infant_rr_offset = rng.normal(0, params["rr_between_infant_sd"])
         infant_hrv_offset = rng.normal(0, params["hrv_between_infant_sd"])
         infant_pupil_offset = rng.normal(0, params["pupil_between_infant_sd"])
@@ -100,6 +111,7 @@ def generate_session_features_df(params: dict) -> pd.DataFrame:
                 resting_hr = (
                     hr_mean
                     + infant_hr_offset
+                    + infant_hr_slope_offset * age_from_3mo
                     + rng.normal(0, params["hr_session_noise_sd"])
                 )
 
@@ -244,8 +256,8 @@ def generate_dense_timeseries_df(params: dict) -> pd.DataFrame:
 
 
 def save_parameters(params: dict) -> None:
-    json_path = TABLES_DIR / "simulation_parameters.json"
-    csv_path = TABLES_DIR / "simulation_parameters.csv"
+    json_path = DATA_DIR / "simulation_parameters.json"
+    csv_path = DATA_DIR / "simulation_parameters.csv"
 
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(params, f, indent=2)
@@ -270,8 +282,8 @@ def main() -> None:
     print("----------------------------")
     print(f"session_features_df: {session_df.shape} -> {session_path}")
     print(f"dense_timeseries_df: {dense_df.shape} -> {dense_path}")
-    print(f"parameters saved to: {TABLES_DIR / 'simulation_parameters.json'}")
-    print(f"parameters saved to: {TABLES_DIR / 'simulation_parameters.csv'}")
+    print(f"parameters saved to: {DATA_DIR / 'simulation_parameters.json'}")
+    print(f"parameters saved to: {DATA_DIR / 'simulation_parameters.csv'}")
 
     print("\nAge-level means")
     print("---------------")

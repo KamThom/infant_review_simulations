@@ -1,6 +1,10 @@
 from pathlib import Path
 import numpy as np
 import pandas as pd
+import matplotlib
+
+matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
 
 from project_style import COLORS, apply_style
@@ -108,47 +112,81 @@ print("--------------------------------")
 print(summary)
 
 
-fig, ax = plt.subplots(figsize=(9.0, 4.8))
+def make_plot(show_ground_truth: bool, png_name: str, pdf_name: str):
+    fig, ax = plt.subplots(figsize=(9.0, 4.8))
 
-ax.scatter(
-    df["time_s"],
-    df["rr_sensor"],
-    s=13,
-    alpha=0.35,
-    color=COLORS["gray_mid"],
-    edgecolors="none",
-    label="Noisy sensor observations",
+    ax.scatter(
+        df["time_s"],
+        df["rr_sensor"],
+        s=13,
+        alpha=0.35,
+        color=COLORS["gray_mid"],
+        edgecolors="none",
+        label="Noisy sensor observations",
+    )
+
+    if show_ground_truth:
+        ax.plot(
+            df["time_s"],
+            df["latent_rr"],
+            linewidth=1.8,
+            color=COLORS["black"],
+            alpha=0.75,
+            label="Simulated ground truth",
+        )
+
+    ax.plot(
+        df["time_s"],
+        df["kalman_rr_estimate"],
+        linewidth=2.8,
+        color=COLORS["REF"],
+        label="State-space estimate",
+    )
+
+    ax.set_xlabel("Time (s)")
+    ax.set_ylabel("Respiratory rate (breaths/min)")
+    ax.set_title("State-space estimate tracks respiratory rate through a noisy sensor")
+
+    ax.set_xlim(df["time_s"].min(), df["time_s"].max())
+
+    y_candidates = [
+        np.nanmin(df["rr_sensor"]),
+        df["kalman_rr_estimate"].min(),
+        np.nanmax(df["rr_sensor"]),
+        df["kalman_rr_estimate"].max(),
+    ]
+    if show_ground_truth:
+        y_candidates.extend([df["latent_rr"].min(), df["latent_rr"].max()])
+    ax.set_ylim(min(y_candidates) - 2, max(y_candidates) + 2)
+
+    ax.legend(frameon=False, loc="upper right")
+
+    fig.tight_layout()
+
+    png_path = FIGURES_DIR / png_name
+    pdf_path = FIGURES_DIR / pdf_name
+
+    fig.savefig(png_path)
+    fig.savefig(pdf_path)
+    plt.close(fig)
+
+    return png_path, pdf_path
+
+
+png_path, pdf_path = make_plot(
+    show_ground_truth=False,
+    png_name="figure_05_state_space_kalman_rr.png",
+    pdf_name="figure_05_state_space_kalman_rr.pdf",
 )
 
-
-ax.plot(
-    df["time_s"],
-    df["kalman_rr_estimate"],
-    linewidth=2.8,
-    color=COLORS["REF"],
-    label="State-space estimate",
+truth_png_path, truth_pdf_path = make_plot(
+    show_ground_truth=True,
+    png_name="figure_05_state_space_kalman_rr_with_ground_truth.png",
+    pdf_name="figure_05_state_space_kalman_rr_with_ground_truth.pdf",
 )
-
-ax.set_xlabel("Time (s)")
-ax.set_ylabel("Respiratory rate (breaths/min)")
-ax.set_title("State-space estimate tracks respiratory rate through dropout")
-
-ax.set_xlim(df["time_s"].min(), df["time_s"].max())
-
-y_min = min(np.nanmin(df["rr_sensor"]), df["kalman_rr_estimate"].min()) - 2
-y_max = max(np.nanmax(df["rr_sensor"]), df["kalman_rr_estimate"].max()) + 2
-ax.set_ylim(y_min, y_max)
-
-ax.legend(frameon=False, loc="upper right")
-
-fig.tight_layout()
-
-png_path = FIGURES_DIR / "figure_05_state_space_kalman_rr.png"
-pdf_path = FIGURES_DIR / "figure_05_state_space_kalman_rr.pdf"
-
-fig.savefig(png_path)
-fig.savefig(pdf_path)
 
 print(f"\nSaved PNG to: {png_path}")
 print(f"Saved PDF to: {pdf_path}")
+print(f"Saved ground-truth PNG to: {truth_png_path}")
+print(f"Saved ground-truth PDF to: {truth_pdf_path}")
 print(f"Saved summary to: {summary_path}")

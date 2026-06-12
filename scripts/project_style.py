@@ -1,3 +1,7 @@
+import matplotlib
+
+matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
 
 COLORS = {
@@ -31,7 +35,7 @@ POSITION_LABELS = {
 def apply_style():
     plt.rcParams.update(
         {
-            "font.family": "Arial",
+            "font.family": "DejaVu Sans",
             "pdf.fonttype": 42,
             "ps.fonttype": 42,
             "axes.spines.top": False,
