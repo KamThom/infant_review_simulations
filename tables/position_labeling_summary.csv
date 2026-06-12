@@ -1,6 +1,0 @@
-metric,value
-model,RandomForestClassifier
-held_out_balanced_accuracy,0.9449831813357796
-n_windows,1080
-n_train,702
-n_test,378

@@ -159,7 +159,6 @@ for label in label_order:
         label=POSITION_LABELS[label],
     )
 
-ax_scatter.set_title("A. Sensor windows occupy separable feature regions")
 ax_scatter.set_xlabel("Posture angle feature")
 ax_scatter.set_ylabel("Movement intensity feature")
 ax_scatter.legend(frameon=False, loc="upper left", ncol=2)
@@ -172,7 +171,6 @@ im = ax_cm.imshow(
     cmap="Greys",
 )
 
-ax_cm.set_title(f"B. Random forest held-out accuracy = {balanced_acc:.2f}")
 ax_cm.set_xticks(np.arange(len(label_order)))
 ax_cm.set_yticks(np.arange(len(label_order)))
 ax_cm.set_xticklabels([POSITION_LABELS[x] for x in label_order], rotation=35, ha="right")
@@ -212,7 +210,6 @@ for _, row in df.iterrows():
         edgecolors="none",
     )
 
-ax_timeline.set_title("C. Classifier converts dense windows into a behavioral timeline")
 ax_timeline.set_xlabel("Session time (hours)")
 ax_timeline.set_yticks([])
 ax_timeline.set_ylim(0, 1)
@@ -237,11 +234,6 @@ ax_timeline.legend(
     ncol=4,
 )
 
-
-fig.suptitle(
-    "Random forest labeling turns wearable sensor windows into behavioral representations",
-    y=0.98,
-)
 
 png_path = FIGURES_DIR / "figure_04_automated_position_labeling.png"
 pdf_path = FIGURES_DIR / "figure_04_automated_position_labeling.pdf"

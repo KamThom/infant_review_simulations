@@ -1,8 +1,0 @@
-,Coef.,Std.Err.,z,P>|z|,[0.025,0.975]
-Intercept,136.755,0.720,189.845,0.000,135.343,138.167
-"C(group, Treatment(reference='REF'))[T.COMPARISON]",8.259,1.037,7.968,0.000,6.228,10.291
-age_years_after_3mo,-13.274,0.263,-50.497,0.000,-13.789,-12.759
-"age_years_after_3mo:C(group, Treatment(reference='REF'))[T.COMPARISON]",3.316,0.379,8.756,0.000,2.574,4.059
-Group Var,30.681,1.423,,,,
-Group x age_years_after_3mo Cov,1.026,0.355,,,,
-age_years_after_3mo Var,2.638,0.189,,,,

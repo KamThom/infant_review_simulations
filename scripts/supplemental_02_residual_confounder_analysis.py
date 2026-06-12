@@ -145,15 +145,9 @@ for spec in plot_specs:
         alpha=0.7,
     )
 
-    ax.set_title(spec["title"])
     ax.set_xlabel("Context activity, known in simulation (z)")
 
 axes[0].set_ylabel("Regression residual")
-
-fig.suptitle(
-    "Residual structure reveals an omitted context effect",
-    y=1.02,
-)
 
 fig.tight_layout()
 

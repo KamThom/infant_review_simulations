@@ -244,7 +244,6 @@ ax.set_xticklabels(
 )
 
 ax.set_ylabel("Balanced accuracy")
-ax.set_title("Feature leakage can create apparent predictive performance")
 
 ax.set_ylim(0.40, 1.04)
 

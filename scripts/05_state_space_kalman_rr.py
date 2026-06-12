@@ -145,7 +145,6 @@ def make_plot(show_ground_truth: bool, png_name: str, pdf_name: str):
 
     ax.set_xlabel("Time (s)")
     ax.set_ylabel("Respiratory rate (breaths/min)")
-    ax.set_title("State-space estimate tracks respiratory rate through a noisy sensor")
 
     ax.set_xlim(df["time_s"].min(), df["time_s"].max())
 

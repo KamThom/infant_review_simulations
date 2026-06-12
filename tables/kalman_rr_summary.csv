@@ -1,6 +1,0 @@
-metric,value
-sensor_rmse_available_samples,1.9803750112504412
-kalman_rmse_available_samples,0.6809025078188167
-kalman_rmse_all_samples,0.6741456781127881
-missing_rr_samples,30.0
-total_samples,300.0

@@ -69,7 +69,6 @@ plt.axhline(0, linestyle=":", linewidth=1)
 
 plt.xlabel("Mean heart rate from ECG and PPG sensors (bpm)")
 plt.ylabel("PPG - ECG heart rate (bpm)")
-plt.title("Bland-Altman agreement between simulated HR sensors")
 plt.legend(frameon=False, fontsize=8)
 
 plt.tight_layout()

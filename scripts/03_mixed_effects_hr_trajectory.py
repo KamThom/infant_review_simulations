@@ -203,10 +203,6 @@ for group in groups:
 
 ax.set_xlabel("Age (months)")
 ax.set_ylabel("Resting heart rate (bpm)")
-ax.set_title(
-    "Mixed effects model tracks resting heart rate development\n"
-    "for population groups and individual infants"
-)
 
 ax.set_xlim(2.5, 24.5)
 ax.set_xticks(age_grid)
